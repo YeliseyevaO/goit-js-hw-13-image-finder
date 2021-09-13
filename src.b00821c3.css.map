@@ -1,0 +1,1 @@
+{"version":3,"sources":["sass/_index.scss"],"names":[],"mappings":"AAAA,iBAGE,sBAGF,aACE,aAAA,CACA,eAAA,CACA,iBAAA,CACA","file":"src.b00821c3.css","sourceRoot":"../src","sourcesContent":["*,\n*::before,\n*::after {\n  box-sizing: border-box;\n}\n\n#search-form {\n  display: block;\n  margin-top: 40px;\n  margin-right: auto;\n  border: 3px;\n}\n"]}
