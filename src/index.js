@@ -1,4 +1,5 @@
-/*import './sass/main.scss';*/
+import './sass/main.scss';
+import debounce from 'lodash.debounce';
 /*
 const options = {
   headers: {
@@ -6,14 +7,15 @@ const options = {
   },
 };*/
 const refs = {
-  input: document.querySelector('#search-form'),
+  form: document.querySelector('#search-form'),
   imgList: document.querySelector('.gallery'),
 };
-refs.input.addEventListener('input', debounce(foundFoto, 500));
+refs.form.addEventListener('input', debounce(foundFoto, 500));
 
 function foundFoto(e) {
+  const fotoName = e.target.value;
   fetch(
-    'https://pixabay.com/api/?image_type=photo&orientation=horizontal&q=sea&page=1&per_page=12&key=23352968-b8b048e55839ee6b2f6a0c2b8',
+    `https://pixabay.com/api/?image_type=photo&orientation=horizontal&q=${fotoName}&page=1&per_page=12&key=23352968-b8b048e55839ee6b2f6a0c2b8`,
   )
     .then(r => r.json())
     .then(console.log);
