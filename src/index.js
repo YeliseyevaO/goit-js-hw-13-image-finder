@@ -1,22 +1,36 @@
 import './sass/main.scss';
 import debounce from 'lodash.debounce';
+import PhotoApiService from './api-service';
+import photoCardTml from './photo.hbs';
 /*
 const options = {
   headers: {
     Authorization: '23352968-b8b048e55839ee6b2f6a0c2b8',
   },
 };*/
+const photoApiServise = new PhotoApiService();
 const refs = {
   form: document.querySelector('#search-form'),
   imgList: document.querySelector('.gallery'),
+  moreBtn: document.querySelector('.more-btn'),
 };
-refs.form.addEventListener('input', debounce(foundFoto, 500));
+refs.form.addEventListener('input', debounce(foundPhoto, 500));
+refs.moreBtn.addEventListener('click', foundMorePhoto);
 
-function foundFoto(e) {
-  const fotoName = e.target.value;
-  fetch(
-    `https://pixabay.com/api/?image_type=photo&orientation=horizontal&q=${fotoName}&page=1&per_page=12&key=23352968-b8b048e55839ee6b2f6a0c2b8`,
-  )
-    .then(r => r.json())
-    .then(console.log);
+function foundPhoto(e) {
+  photoApiServise.photo = e.target.value;
+  photoApiServise.stepOnOnePage();
+  photoApiServise.fetchPhoto();
+  photoApiServise.fetchPhoto().then(photoCardMarkUp);
+}
+function foundMorePhoto(e) {
+  photoApiServise.fetchPhoto().then(photoCardMarkUp);
+  refs.imgList.scrollIntoView({
+    behavior: 'smooth',
+    block: 'end',
+  });
+}
+
+function photoCardMarkUp(hits) {
+  refs.imgList.insertAdjacentHTML('beforeend', photoCardTml(hits));
 }
