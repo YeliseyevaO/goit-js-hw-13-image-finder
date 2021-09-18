@@ -11,12 +11,14 @@ export default class PhotoApiService {
         return res.json();
       })
       .then(data => {
-        this.page += 1;
         return data.hits;
       });
   }
   stepOnOnePage() {
     this.page = 1;
+  }
+  plusPage() {
+    this.page += 1;
   }
   get photo() {
     return this.photoName;

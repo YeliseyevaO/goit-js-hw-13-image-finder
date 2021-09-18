@@ -7,26 +7,34 @@ const photoApiServise = new PhotoApiService();
 const refs = {
   form: document.querySelector('#search-form'),
   imgList: document.querySelector('.gallery'),
-  moreBtn: document.querySelector('.load-more'),
+  div: document.querySelector('.sentinel'),
 };
-refs.form.addEventListener('input', debounce(foundPhoto, 500));
-refs.moreBtn.addEventListener('click', foundMorePhoto);
+refs.form.addEventListener('input', debounce(foundPhoto, 1000));
 
 function foundPhoto(e) {
-  refs.imgList.innerHTML = '';
   photoApiServise.photo = e.target.value;
-  photoApiServise.stepOnOnePage();
-  photoApiServise.fetchPhoto();
-  photoApiServise.fetchPhoto().then(photoCardMarkUp);
-}
-function foundMorePhoto(e) {
-  refs.imgList.scrollIntoView({
-    behavior: 'smooth',
-    block: 'end',
-  });
-  photoApiServise.fetchPhoto().then(photoCardMarkUp);
+  if (photoApiServise.photo !== '') {
+    refs.imgList.innerHTML = '';
+    photoApiServise.stepOnOnePage();
+    photoApiServise.fetchPhoto();
+    photoApiServise.fetchPhoto().then(photoCardMarkUp);
+    photoApiServise.plusPage();
+  }
 }
 
 function photoCardMarkUp(hits) {
   refs.imgList.insertAdjacentHTML('beforeend', photoCardTml(hits));
 }
+const onEntry = entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting && photoApiServise.photo !== '') {
+      photoApiServise.fetchPhoto().then(photoCardMarkUp);
+      photoApiServise.plusPage();
+    }
+  });
+};
+
+const observer = new IntersectionObserver(onEntry, {
+  rootMargin: '200px',
+});
+observer.observe(refs.div);
