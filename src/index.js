@@ -16,7 +16,6 @@ function foundPhoto(e) {
   if (photoApiServise.photo !== '') {
     refs.imgList.innerHTML = '';
     photoApiServise.stepOnOnePage();
-    photoApiServise.fetchPhoto();
     photoApiServise.fetchPhoto().then(photoCardMarkUp);
     photoApiServise.plusPage();
   }
